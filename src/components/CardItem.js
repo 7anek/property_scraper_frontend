@@ -27,7 +27,6 @@ export default function CardItem(props) {
                 </CardContent>
                 <CardActions>
                 <Button size="small">View</Button>
-                <Button size="small">Edit</Button>
                 </CardActions>
             </Card>
     );
