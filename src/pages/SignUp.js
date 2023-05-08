@@ -59,7 +59,19 @@ export default function SignUp() {
         })
         .catch(error => {
             console.log("SignIn Error fetching data: ");
-            setError(error.stack)
+            let error_str;
+            if( error.hasOwnProperty("response")){
+              if(error.response.data.hasOwnProperty("detail")){
+                error_str = error.response.data.detail;
+              }else{
+                error_str=JSON.stringify(error.response.data).replaceAll(/[\[\]{}""]/g,"").replaceAll(",",", ").replaceAll(":",": ");
+              }
+            }else if(error.hasOwnProperty("message")){
+              error_str = error.message;
+            }else{
+              error_str = "Unknown error";
+            }
+            setError(error_str)
         });
       })
       .catch(error => {

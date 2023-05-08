@@ -55,15 +55,31 @@ export default function SignIn() {
         })
         .catch(error => {
             console.log("SignIn Error in logging");
-            console.log(error.response.data.detail);
-            setError(error);
+            // console.log(error.response.data.detail);
+            console.log(error);
+            let error_str;
+            if( error.hasOwnProperty("response")){
+              if(error.response.data.hasOwnProperty("detail")){
+                error_str = error.response.data.detail;
+              }else{
+                error_str=JSON.stringify(error.response.data).replaceAll(/[\[\]{}""]/g,"").replaceAll(",",", ").replaceAll(":",": ");
+              }
+            }else if(error.hasOwnProperty("message")){
+              error_str = error.message;
+            }else{
+              error_str = "Unknown error";
+            }
+            console.log(error_str);
+            setError(error_str);
+
         });
   }
 
   let api_alert;
 
   if(error !== false){
-    api_alert = <Alert severity="error" onClose={removeAlert}>{error.response.data.detail}</Alert>
+    // api_alert = <Alert severity="error" onClose={removeAlert}>{error.response.data.detail}</Alert>
+    api_alert = <Alert severity="error" >{error}</Alert>
   }
   
 

@@ -94,6 +94,7 @@ axiosInstance.interceptors.response.use((response) => {
         }
     } else {
         console.log("AxiosInterceptor error no error.response");
+        return Promise.reject(error);
     }
 });
 // }

@@ -1,4 +1,4 @@
-import { CssBaseline, Grid, TablePagination } from "@mui/material";
+import { CssBaseline, Grid, TablePagination, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useState } from "react";
 import CardItem from "../components/CardItem";
@@ -16,15 +16,12 @@ const Search = () => {
 
     const submitForm = (form) => {
         setForm(form);
-        // console.log({
-        //   aaa: form.get('priceMin'),
-        //   bbb: form.get('priceMax'),
-        // });
         setPropertries([]);
         getResults(form);
     }
 
     const getResults = (form) => {
+        setError(error)
         const form_obj = formDataToObj(form);
         console.log(form_obj)
         axiosInstance.get("properties/search", {params: form_obj}, {headers: {"Content-Type": "multipart/form-data"}})
@@ -56,27 +53,28 @@ const Search = () => {
 
     let body;
 
-    if(error !== false) {
-        body = <p>Error fetching data: {error.message},  {error.message}</p>
-    }
+    
     
     // else setError(false);//Too many rerenderers
-    if(form === false) {
-        body = <p>Submit form to see results </p>
-    }else{
+    if(error !== false) {
+        body = <Typography>Error fetching data: {error.message},  {error.code}</Typography>
+    } else if(form === false) {
+        body = <Typography>Submit form to see results </Typography>
+    } else{
         console.log("888888888888 "+properties.length);
-        body = <React.Fragment>
-        <Grid container spacing={4}>
-        {properties.slice((page)*rowsPerPage, (page+1)*rowsPerPage).map((item, index) => (
-            <Grid item key={index} xs={12} sm={6} md={4}>
-                <CardItem item={item} />
+        body = (
+        <React.Fragment>
+            <Grid container spacing={4}>
+                {properties.slice((page)*rowsPerPage, (page+1)*rowsPerPage).map((item, index) => (
+                    <Grid item key={index} xs={12} sm={6} md={4}>
+                        <CardItem item={item} />
+                    </Grid>
+                ))}
             </Grid>
-        ))}
-        
-        </Grid>
-        <Divider />
-        <TablePagination component="div" count={properties.length} page={page} onPageChange={handleChangePage} rowsPerPage={rowsPerPage} onRowsPerPageChange={handleChangeRowsPerPage}/>
+            <Divider />
+            <TablePagination component="div" count={properties.length} page={page} onPageChange={handleChangePage} rowsPerPage={rowsPerPage} onRowsPerPageChange={handleChangeRowsPerPage}/>
         </React.Fragment>
+        )
     }
     return (
         <Grid container spacing={2}>
@@ -90,7 +88,13 @@ const Search = () => {
         )
     function formDataToObj(form){
         return { 
-            localization: form.get('localization'),
+            province: form.get('province'),
+            county: form.get('county'),
+            city: form.get('city'),
+            district: form.get('district'),
+            district_neighbourhood: form.get('district_neighbourhood'),
+            street: form.get('street'),
+            formatted_address: form.get('formatted_address'),
             price_min: form.get('priceMin') ? parseInt(form.get('priceMin')) : form.get('priceMin'), 
             price_max: form.get('priceMax') ? parseInt(form.get('priceMax')) : form.get('priceMax'), 
             area_min: form.get('areaMin') ? parseInt(form.get('areaMin')) : form.get('areaMin'), 

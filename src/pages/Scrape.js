@@ -37,7 +37,7 @@ const Scrape = () => {
     let body;
 
     if(error !== false) {
-        body = <p>Error fetching data: {error.message},  {error.status_code}</p>
+        body = <Typography>Error fetching data: {error.message}, {error.code}, {error.status_code}</Typography>
     }
     else if(job_id){
         console.log("xxxxxxxxxxxxxx "+job_id);
@@ -66,7 +66,13 @@ const Scrape = () => {
 
     function formDataToObj(form){
         return { 
-            localization: form.get('localization'),
+            province: form.get('province'),
+            county: form.get('county'),
+            city: form.get('city'),
+            district: form.get('district'),
+            district_neighbourhood: form.get('district_neighbourhood'),
+            street: form.get('street'),
+            formatted_address: form.get('formatted_address'),
             price_min: form.get('priceMin') ? parseInt(form.get('priceMin')) : form.get('priceMin'), 
             price_max: form.get('priceMax') ? parseInt(form.get('priceMax')) : form.get('priceMax'), 
             area_min: form.get('areaMin') ? parseInt(form.get('areaMin')) : form.get('areaMin'), 

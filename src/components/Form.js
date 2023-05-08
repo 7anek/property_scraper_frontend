@@ -10,13 +10,51 @@ export default function Form(props) {
   const [flat_type, setFlatType] = useState("any");
   const [house_type, setHouseType] = useState("any");
   const [plot_type, setPlotType] = useState("any");
-
+  const [googleMapsAutocompleteServicePlace, setGoogleMapsAutocompleteServicePlace] = useState('');
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
     const data = new FormData(event.currentTarget);
-    console.log('form to submit: ',data);
-    props.submitForm(data);
+
+    //wyciągnij dane adresowe
+    if(googleMapsAutocompleteServicePlace){
+      const placeId = googleMapsAutocompleteServicePlace.place_id;
+      const geocoder = new window.google.maps.Geocoder();
+      geocoder.geocode({ placeId }, (results, status) => {
+
+        if (status !== "OK" || results.length === 0) {
+          console.log('błąd pobierania lokalizacji po place id')
+          props.submitForm(data);
+          return;
+        }
+        console.log('geocoder results',results);
+        const placeDetails = results[0];
+
+        data.append("formatted_address", placeDetails.formatted_address);
+
+        var province=placeDetails.address_components.find((component) => component.types.includes('administrative_area_level_1'),);
+        var county=placeDetails.address_components.find((component) => component.types.includes('administrative_area_level_2'),);
+        var city=placeDetails.address_components.find((component) => component.types.includes('locality'),);
+        var district=placeDetails.address_components.find((component) => component.types.includes('sublocality_level_1'),);
+        var district_neighbourhood=placeDetails.address_components.find((component) => component.types.includes('sublocality_level_2'),);
+        var street=placeDetails.address_components.find((component) => component.types.includes('route'),);
+
+        if(province) data.append("province", province.short_name);
+        if(county) data.append("county", county.short_name);
+        if(city) data.append("city", city.short_name);
+        if(district) data.append("district", district.short_name);
+        if(district_neighbourhood) data.append("district_neighbourhood", district_neighbourhood.short_name);
+        if(street) data.append("street", street.short_name);
+        
+        props.submitForm(data);
+    });
+    }else{
+      console.log('form to submit: ',data);
+      props.submitForm(data);
+    }
+    
+    
   };
 
   const handleChange = (event) => {
@@ -25,6 +63,10 @@ export default function Form(props) {
     else if(event.target.name==="flatType") setFlatType(event.target.value);
     else if(event.target.name==="houseType") setHouseType(event.target.value);
     else if(event.target.name==="plotType") setPlotType(event.target.value);
+  };
+
+  const handlePlaceChange = (place) => {
+    setGoogleMapsAutocompleteServicePlace(place);
   };
 
   return (
@@ -41,7 +83,7 @@ export default function Form(props) {
         <Box component="form" noValidate onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <GoogleMapsAutocompleteInput />
+              <GoogleMapsAutocompleteInput onValueChange={handlePlaceChange}/>
             </Grid>
             <Grid item xs={6}>
               <TextField

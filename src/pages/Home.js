@@ -29,7 +29,7 @@ const Home = () => {
                 console.log("handling error in Home");
                 console.log("Home Error fetching data: ", error);
                 // console.error("Error response: ", error.response);
-                // setError(error)
+                setError(error)
             })
             .finally(() => {
                 setLoading(false);
@@ -44,7 +44,7 @@ const Home = () => {
             <TableSkeleton />
         </React.Fragment>);
     }
-    // if(error !== false) return <Typography>Error fetching data: {error}</Typography>
+    if(error !== false) return <Typography>Error fetching data: {error.message},  {error.code}</Typography>
     return <PropertiesTable properties={properties}/>
 };
 

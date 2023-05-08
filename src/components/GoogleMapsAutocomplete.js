@@ -26,7 +26,7 @@ function loadScript(src, position, id) {
 
 const autocompleteService = { current: null };
 
-export default function GoogleMapsAutocompleteInput() {
+export default function GoogleMapsAutocompleteInput(props) {
   const [value, setValue] = React.useState(null);
   const [inputValue, setInputValue] = React.useState('');
   const [options, setOptions] = React.useState([]);
@@ -105,6 +105,7 @@ export default function GoogleMapsAutocompleteInput() {
       onChange={(event, newValue) => {
         setOptions(newValue ? [newValue, ...options] : options);
         setValue(newValue);
+        props.onValueChange(newValue);
       }}
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);
