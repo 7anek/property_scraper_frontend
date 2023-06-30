@@ -31,7 +31,7 @@ export default function Form(props) {
         console.log('geocoder results',results);
         const placeDetails = results[0];
 
-        data.append("formatted_address", placeDetails.formatted_address);
+        data.append("address", placeDetails.formatted_address);
 
         var province=placeDetails.address_components.find((component) => component.types.includes('administrative_area_level_1'),);
         var county=placeDetails.address_components.find((component) => component.types.includes('administrative_area_level_2'),);

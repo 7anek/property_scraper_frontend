@@ -10,7 +10,7 @@ import PropertiesTable from "../components/PropertiesTable";
 const Scrape = () => {
 
     const [form, setForm] = useState(false);
-    const [job_id, setJobId] = useState(false);
+    const [job_ids, setJobIds] = useState(false);
     const [error, setError] = useState(false);
 
     const submitForm = (f) => {
@@ -20,10 +20,10 @@ const Scrape = () => {
         console.log('submited form: ',form)
         console.log('form temp: ',form_temp)
         if(form_temp){
-            axios.post("http://127.0.0.1:8000/api/properties/scrape", form_temp, {headers: {"Content-Type": "multipart/form-data"}})
+            axiosInstance.post("scrape", form_temp, {headers: {"Content-Type": "multipart/form-data"}})
                 .then((response) => {
-                    setJobId(response.data);
-                    console.log("job id: ", job_id);
+                    setJobIds(response.data.job_ids);
+                    console.log("job ids: ", job_ids);
                 })
                 .catch(error => {
                     console.error("Error fetching data: ", error);
@@ -39,9 +39,10 @@ const Scrape = () => {
     if(error !== false) {
         body = <Typography>Error fetching data: {error.message}, {error.code}, {error.status_code}</Typography>
     }
-    else if(job_id){
-        console.log("xxxxxxxxxxxxxx "+job_id);
-        body=<ScrapeResponse job_id={job_id} />
+    else if(job_ids){
+        console.log("xxxxxxxxxxxxxx "+job_ids);
+        console.log(job_ids);
+        body=<ScrapeResponse job_ids={job_ids} />
         // body = <p>Scrapping is being processed with job_id {job_id} </p>
     }
     else if(form) {
@@ -52,7 +53,7 @@ const Scrape = () => {
     
     // else setError(false);//Too many rerenderers
     
-    console.log("999999999 "+job_id);
+    console.log("999999999 "+job_ids);
     return (
         <Grid container spacing={2}>
             <Grid item md={4}>
@@ -72,7 +73,7 @@ const Scrape = () => {
             district: form.get('district'),
             district_neighbourhood: form.get('district_neighbourhood'),
             street: form.get('street'),
-            formatted_address: form.get('formatted_address'),
+            address: form.get('address'),
             price_min: form.get('priceMin') ? parseInt(form.get('priceMin')) : form.get('priceMin'), 
             price_max: form.get('priceMax') ? parseInt(form.get('priceMax')) : form.get('priceMax'), 
             area_min: form.get('areaMin') ? parseInt(form.get('areaMin')) : form.get('areaMin'), 
@@ -94,17 +95,19 @@ function ScrapeResponse(props){
 
     const [properties, setProperties] = useState(false);
     const [error, setError] = useState(false);
-    console.log('ScrapeResponse '+properties.length+" job_id "+props.job_id);
+    console.log('ScrapeResponse '+properties.length+" job_ids "+props.job_ids);
     useEffect(() => {
-        console.log('ScrapeResponse useEffect '+properties.length+" job_id "+props.job_id);
+        console.log('ScrapeResponse useEffect '+properties.length+" job_ids "+props.job_ids.join(','));
+        setError(false);
         const intervalId = setInterval(() => {
-        if(props.job_id){
-            axiosInstance.get("properties/scrape/"+props.job_id)
+        if(props.job_ids){
+            axiosInstance.get("scrape/"+props.job_ids.join(','))
             .then((response) => {
                 console.log("ScrapeResponse response: ", response);
                 if(response.status===200){
                     setProperties(response.data);
                     clearInterval(intervalId);
+                    
                 }else if(response.status === 202){
                     console.log('response.status 202');
                 }
@@ -121,9 +124,9 @@ function ScrapeResponse(props){
         }else{
             console.log("No job_id - spierdalaj");
         }
-        },5000);
+        },2000);
         return () => clearInterval(intervalId);
-    }, [props.job_id]);
+    }, [props.job_ids]);
 
     if(error !== false) {
         return <Typography>Error fetching data: {error.message},  {error.status_code}</Typography>

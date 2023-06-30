@@ -4,18 +4,6 @@ import { DataGrid } from '@mui/x-data-grid';
 
 const columns = [
   {
-    field: 'service_name',
-    headerName: 'Serivice',
-    width: 110,
-    editable: true,
-  },
-  {
-    field: 'type_of_property',
-    headerName: 'Property type',
-    width: 110,
-    editable: true,
-  },
-  {
     field: 'price',
     headerName: 'Price',
     type: 'number',
@@ -23,16 +11,40 @@ const columns = [
     editable: true,
   },
   {
-    field: 'location',
-    headerName: 'Location',
-    width: 250,
-    editable: true,
-  },
-  {
     field: 'area',
     headerName: 'Area',
     type: 'number',
     width: 100,
+    editable: true,
+  },
+  {
+    field: 'address',
+    headerName: 'address',
+    width: 250,
+    editable: true,
+  },
+  {
+    field: 'service_name',
+    headerName: 'Serivice',
+    width: 110,
+    editable: true,
+  },
+  {
+    field: 'service_url',
+    headerName: 'URL',
+    width: 110,
+    editable: true,
+  },
+  {
+    field: 'property_type',
+    headerName: 'Property type',
+    width: 110,
+    editable: true,
+  },
+  {
+    field: 'offer_type',
+    headerName: 'Offer type',
+    width: 110,
     editable: true,
   },
   {

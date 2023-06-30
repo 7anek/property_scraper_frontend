@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import history from "./history";
 
 const axiosInstance = axios.create({
-    baseURL: "http://127.0.0.1:8000/api/",
+    // baseURL: "http://127.0.0.1:8000/",
+    baseURL: process.env.REAL_ESTATE_API_URL,
     // headers: {
     //     "Authorization": "JWT "+localStorage.getItem('jwt_access_token')
     // }

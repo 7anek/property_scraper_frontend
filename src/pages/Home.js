@@ -13,7 +13,7 @@ const Home = () => {
     const [error, setError] = useState(false);
 
     useEffect(() => {
-        axiosInstance.get("properties/")
+        axiosInstance.get("")
             .then((response) => {
                 console.log("handling successful response in Home");
                 console.log(localStorage.getItem("username"));
