@@ -16,6 +16,7 @@ const Home = () => {
         axiosInstance.get("")
             .then((response) => {
                 console.log("handling successful response in Home");
+                console.log("api url:",process.env.REACT_APP_REAL_ESTATE_API_URL)
                 console.log(localStorage.getItem("username"));
                 console.log(localStorage.getItem("jwt_access_token"));
                 console.log(localStorage.getItem("jwt_refresh_token"));
