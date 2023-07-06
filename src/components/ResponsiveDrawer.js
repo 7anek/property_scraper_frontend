@@ -80,14 +80,14 @@ function ResponsiveDrawer(props) {
               <ListItemText disableTypography={true}  primary={<Typography variant="h6" color="grey" sx={{fontWeight:'505'}}>Index</Typography>}/>
             </ListItemButton>
           </ListItem>
-            <ListItem key="2" component={Link} to="/search" disablePadding>
+            {/* <ListItem key="2" component={Link} to="/search" disablePadding>
               <ListItemButton>
                 <ListItemIcon>
                   <SearchIcon />
                 </ListItemIcon>
                 <ListItemText disableTypography={true} primary={<Typography variant="h6" color="grey" sx={{fontWeight:'505'}}>Search</Typography>} />
               </ListItemButton>
-            </ListItem>
+            </ListItem> */}
           <ListItem key="3" component={Link} to="/scrape" disablePadding>
             <ListItemButton>
               <ListItemIcon>
