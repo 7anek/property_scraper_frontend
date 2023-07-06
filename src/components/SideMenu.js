@@ -38,14 +38,14 @@ export default function SideMenuDrawer() {
                   <ListItemText primary="Index" />
                 </ListItemButton>
               </ListItem>
-                <ListItem key="2" component={Link} to="/search" disablePadding>
+                {/* <ListItem key="2" component={Link} to="/search" disablePadding>
                   <ListItemButton>
                     <ListItemIcon>
                       <SearchIcon />
                     </ListItemIcon>
                     <ListItemText primary="Search" />
                   </ListItemButton>
-                </ListItem>
+                </ListItem> */}
               <ListItem key="3" component={Link} to="/scrape" disablePadding>
                 <ListItemButton>
                   <ListItemIcon>
