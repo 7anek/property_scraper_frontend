@@ -30,7 +30,7 @@ const Home = () => {
                 console.log("handling error in Home");
                 console.log("Home Error fetching data: ", error);
                 console.log("api url:",process.env.REACT_APP_REAL_ESTATE_API_URL)
-                // console.error("Error response: ", error.response);
+                console.error("Error response: ", error.response);
                 setError(error)
             })
             .finally(() => {
