@@ -31,6 +31,9 @@ const Home = () => {
                 console.log("Home Error fetching data: ", error);
                 console.log("api url:",process.env.REACT_APP_REAL_ESTATE_API_URL)
                 console.error("Error response: ", error.response);
+                if(!error.response){
+                    error.message="Api unavailable";
+                }
                 setError(error)
             })
             .finally(() => {

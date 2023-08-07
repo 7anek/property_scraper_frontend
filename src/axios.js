@@ -1,12 +1,14 @@
 import axios from 'axios';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import history from "./history";
 
 
 const axiosInstance = axios.create({
     // baseURL: "http://127.0.0.1:8000/",
     baseURL: process.env.REACT_APP_REAL_ESTATE_API_URL,
+    headers: {
+        // "ngrok-skip-browser-warning": true
+        "ngrok-skip-browser-warning": "any"
+    }
     // headers: {
     //     "Authorization": "JWT "+localStorage.getItem('jwt_access_token')
     // }
