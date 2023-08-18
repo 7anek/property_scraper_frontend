@@ -24,6 +24,7 @@ export default function SignUp() {
 
   const [error, setError] = useState(false);
   const [errorAlertVisible, setErrorAlertVisible] = useState(true);
+  const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
 
   const removeAlert = () => {
@@ -45,34 +46,36 @@ export default function SignUp() {
   };
 
   function ApiRegister(params){
-    axiosInstance.post("signup/",params=params)
+    axiosInstance.post("accounts/token/signup/",params=params)
       .then((response) => {
         console.log(response);
-        axiosInstance.post("signin/",{username: params.username, password: params.password})
-        .then((response) => {
-            console.log("SignIn success");
-            console.log("SignIn "+response);
-            localStorage.setItem('username', params.username);
-            localStorage.setItem('jwt_access_token', response.data.access);
-            localStorage.setItem('jwt_refresh_token', response.data.refresh);
-            navigate("/");
-        })
-        .catch(error => {
-            console.log("SignIn Error fetching data: ");
-            let error_str;
-            if( error.hasOwnProperty("response")){
-              if(error.response.data.hasOwnProperty("detail")){
-                error_str = error.response.data.detail;
-              }else{
-                error_str=JSON.stringify(error.response.data).replaceAll(/[\[\]{}""]/g,"").replaceAll(",",", ").replaceAll(":",": ");
-              }
-            }else if(error.hasOwnProperty("message")){
-              error_str = error.message;
-            }else{
-              error_str = "Unknown error";
-            }
-            setError(error_str)
-        });
+        setSuccessMessage("Account created. Check your email for confirmation instructions.");
+
+        // axiosInstance.post("accounts/token/signin/",{username: params.username, password: params.password})
+        // .then((response) => {
+        //     console.log("SignIn success");
+        //     console.log("SignIn "+response);
+        //     localStorage.setItem('username', params.username);
+        //     localStorage.setItem('jwt_access_token', response.data.access);
+        //     localStorage.setItem('jwt_refresh_token', response.data.refresh);
+        //     navigate("/");
+        // })
+        // .catch(error => {
+        //     console.log("SignIn Error fetching data: ");
+        //     let error_str;
+        //     if( error.hasOwnProperty("response")){
+        //       if(error.response.data.hasOwnProperty("detail")){
+        //         error_str = error.response.data.detail;
+        //       }else{
+        //         error_str=JSON.stringify(error.response.data).replaceAll(/[\[\]{}""]/g,"").replaceAll(",",", ").replaceAll(":",": ");
+        //       }
+        //     }else if(error.hasOwnProperty("message")){
+        //       error_str = error.message;
+        //     }else{
+        //       error_str = "Unknown error";
+        //     }
+        //     setError(error_str)
+        // });
       })
       .catch(error => {
           console.log("Signup Error fetching data: ");
@@ -157,6 +160,11 @@ export default function SignUp() {
               </Grid>
             </Grid>
             {errorAlertVisible && api_alert}
+            {successMessage && (
+              <Alert severity="success" mt={2} onClose={removeAlert}>
+                {successMessage}
+              </Alert>
+            )}
             <Button
               type="submit"
               fullWidth

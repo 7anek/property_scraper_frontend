@@ -101,7 +101,7 @@ function ScrapeResponse(props){
         setError(false);
         const intervalId = setInterval(() => {
         if(props.job_ids){
-            axiosInstance.get("scrape/"+props.job_ids.join(','))
+            axiosInstance.get("scrape/crawl/"+props.job_ids.join(','))
             .then((response) => {
                 console.log("ScrapeResponse response: ", response);
                 if(response.status===200){

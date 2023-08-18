@@ -6,8 +6,7 @@ const axiosInstance = axios.create({
     // baseURL: "http://127.0.0.1:8000/",
     baseURL: process.env.REACT_APP_REAL_ESTATE_API_URL,
     headers: {
-        // "ngrok-skip-browser-warning": true
-        "ngrok-skip-browser-warning": "any"
+        "ngrok-skip-browser-warning": "any" 
     }
     // headers: {
     //     "Authorization": "JWT "+localStorage.getItem('jwt_access_token')
@@ -54,7 +53,7 @@ axiosInstance.interceptors.response.use((response) => {
                 // jeśli ich niedostarczyłem to znaczy że ich niema więc muszę się zalogować
                 history.push("/signin");
                 return Promise.reject(error);
-            } else if (error.response.config.url === "signin/refresh/") {
+            } else if (error.response.config.url === "accounts/token/signin/refresh/") {
                 console.log("refresh token is not valid or expired - you must log in");
                 localStorage.clear();
                 // window.location.href="/signin";
@@ -65,7 +64,7 @@ axiosInstance.interceptors.response.use((response) => {
                 console.log("access token propably expired");
 
                 if (localStorage.getItem('jwt_access_token')) {
-                    return axiosInstance.post('signin/refresh/', { refresh: localStorage.getItem('jwt_refresh_token') })
+                    return axiosInstance.post('accounts/token/signin/refresh/', { refresh: localStorage.getItem('jwt_refresh_token') })
                         .then((response) => {
                             console.log("AxiosInterceptor refresh response" + response);
                             localStorage.setItem('jwt_access_token', response.data.access);

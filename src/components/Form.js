@@ -36,6 +36,7 @@ export default function Form(props) {
         var province=placeDetails.address_components.find((component) => component.types.includes('administrative_area_level_1'),);
         var county=placeDetails.address_components.find((component) => component.types.includes('administrative_area_level_2'),);
         var city=placeDetails.address_components.find((component) => component.types.includes('locality'),);
+        var community=placeDetails.address_components.find((component) => component.types.includes('administrative_area_level_3'),);
         var district=placeDetails.address_components.find((component) => component.types.includes('sublocality_level_1'),);
         var district_neighbourhood=placeDetails.address_components.find((component) => component.types.includes('sublocality_level_2'),);
         var street=placeDetails.address_components.find((component) => component.types.includes('route'),);
@@ -43,6 +44,7 @@ export default function Form(props) {
         if(province) data.append("province", province.short_name);
         if(county) data.append("county", county.short_name);
         if(city) data.append("city", city.short_name);
+        if(community) data.append("community", community.short_name);
         if(district) data.append("district", district.short_name);
         if(district_neighbourhood) data.append("district_neighbourhood", district_neighbourhood.short_name);
         if(street) data.append("street", street.short_name);

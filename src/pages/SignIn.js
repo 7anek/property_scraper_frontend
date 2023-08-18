@@ -44,7 +44,7 @@ export default function SignIn() {
   };
 
   function RequestJWTokens(request_obj){
-    axiosInstance.post("signin/", {username: request_obj.username, password: request_obj.password})
+    axiosInstance.post("accounts/token/signin/", {username: request_obj.username, password: request_obj.password})
         .then((response) => {
             console.log("SignIn success");
             console.log("SignIn "+response);

@@ -7,7 +7,7 @@ export default function SignOut(){
     const navigate = useNavigate();
 
     useEffect(()=>{
-        axiosInstance.post('signout/', {"refresh": localStorage.getItem('jwt_refresh_token')})
+        axiosInstance.post('accounts/token/signout/', {"refresh": localStorage.getItem('jwt_refresh_token')})
             .then((response)=>{
                 console.log("response: "+response);
                 if(response.status === 200){
