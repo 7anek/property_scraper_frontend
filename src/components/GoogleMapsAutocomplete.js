@@ -33,10 +33,9 @@ export default function GoogleMapsAutocompleteInput(props) {
   const loaded = React.useRef(false);
 
   if (typeof window !== 'undefined' && !loaded.current) {
-    console.log(GOOGLE_MAPS_API_KEY);
     if (!document.querySelector('#google-maps')) {
       loadScript(
-        `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places&region=pl`,
+        `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places&region=pl&language=pl`,
         document.querySelector('head'),
         'google-maps',
       );
