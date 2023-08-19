@@ -124,7 +124,7 @@ function ScrapeResponse(props){
         }else{
             console.log("No job_id - spierdalaj");
         }
-        },2000);
+        },10000);
         return () => clearInterval(intervalId);
     }, [props.job_ids]);
 
