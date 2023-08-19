@@ -12,6 +12,8 @@ const Scrape = () => {
     const [form, setForm] = useState(false);
     const [job_ids, setJobIds] = useState(false);
     const [error, setError] = useState(false);
+    const [refreshing, setRefreshing] = useState(false);
+
 
     const submitForm = (f) => {
         const form_temp = formDataToObj(f);
@@ -62,6 +64,9 @@ const Scrape = () => {
             <Grid item md={8}>
                 {body}
             </Grid>
+            <Button onClick={handleRefresh} disabled={refreshing}>
+                Refresh
+            </Button>
         </Grid>
         )
 
@@ -100,7 +105,7 @@ function ScrapeResponse(props){
         console.log('ScrapeResponse useEffect '+properties.length+" job_ids "+props.job_ids.join(','));
         setError(false);
         const intervalId = setInterval(() => {
-        if(props.job_ids){
+        if(props.job_ids && refreshing){
             axiosInstance.get("scrape/"+props.job_ids.join(','))
             .then((response) => {
                 console.log("ScrapeResponse response: ", response);
@@ -120,13 +125,14 @@ function ScrapeResponse(props){
             })
             .finally(()=>{
                 console.log('finally');
+                setRefreshing(false); 
             })
         }else{
             console.log("No job_id - spierdalaj");
         }
-        },10000);
+        },2000);
         return () => clearInterval(intervalId);
-    }, [props.job_ids]);
+    }, [props.job_ids, refreshing]);
 
     if(error !== false) {
         return <Typography>Error fetching data: {error.message},  {error.status_code}</Typography>
