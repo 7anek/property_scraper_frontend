@@ -20,7 +20,7 @@ const Scrape = () => {
         console.log('submited form: ',form)
         console.log('form temp: ',form_temp)
         if(form_temp){
-            axiosInstance.post("scrape", form_temp, {headers: {"Content-Type": "multipart/form-data"}})
+            axiosInstance.post("scrapy", form_temp, {headers: {"Content-Type": "multipart/form-data"}})
                 .then((response) => {
                     setJobIds(response.data.job_ids);
                     console.log("job ids: ", job_ids);
@@ -101,7 +101,7 @@ function ScrapeResponse(props){
         setError(false);
         const intervalId = setInterval(() => {
         if(props.job_ids){
-            axiosInstance.get("scrape/crawl/"+props.job_ids.join(','))
+            axiosInstance.get("scrapy/crawl/"+props.job_ids.join(','))
             .then((response) => {
                 console.log("ScrapeResponse response: ", response);
                 if(response.status===200){
