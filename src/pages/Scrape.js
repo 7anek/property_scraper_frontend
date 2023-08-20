@@ -151,7 +151,7 @@ function ScrapeResponse(props){
                 console.log('finally');
             })
         }else{
-            console.log("No job_id - spierdalaj");
+            console.log("No job_id");
         }
         },2000);
         return () => clearInterval(intervalId);
@@ -182,7 +182,7 @@ function ScrapeResponse(props){
         <React.Fragment>
             <PropertiesTable properties={properties}/>
             {refreshButtonVisible && (
-            <Button variant="contained" onClick={handleRefresh}>
+            <Button sx={{my:2}}variant="contained" onClick={handleRefresh}>
                 Refresh
             </Button>
             )}

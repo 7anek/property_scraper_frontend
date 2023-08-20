@@ -80,6 +80,7 @@ export default function PropertiesTable({properties}) {
   const getRowId = (row) => row.id;
   return (
     // <Box sx={{ height: '100vh', width: '100%' }}>
+    //- top menu i marginesy
     <Box sx={{ height: (window.innerHeight-64-24-24)+"px", width: '100%' }}>
       <DataGrid
         rows={properties}
