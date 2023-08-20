@@ -6,14 +6,13 @@ import Form from "../components/Form";
 import GallserySkeleton from "../components/GallerySkeleton";
 import Loading from "../components/Loading";
 import PropertiesTable from "../components/PropertiesTable";
+import Button from '@mui/material/Button';
 
 const Scrape = () => {
 
     const [form, setForm] = useState(false);
     const [job_ids, setJobIds] = useState(false);
     const [error, setError] = useState(false);
-    const [refreshing, setRefreshing] = useState(false);
-
 
     const submitForm = (f) => {
         const form_temp = formDataToObj(f);
@@ -63,10 +62,8 @@ const Scrape = () => {
             </Grid>
             <Grid item md={8}>
                 {body}
+                
             </Grid>
-            <Button onClick={handleRefresh} disabled={refreshing}>
-                Refresh
-            </Button>
         </Grid>
         )
 
@@ -100,18 +97,45 @@ function ScrapeResponse(props){
 
     const [properties, setProperties] = useState(false);
     const [error, setError] = useState(false);
+    const [refreshButtonVisible, setRefreshButtonVisible] = useState(false);
+
+
+    const handleRefresh = () => {
+        if(props.job_ids){
+            axiosInstance.get("scrape/"+props.job_ids.join(','))
+            .then((response) => {
+                console.log("ScrapeResponse response: ", response);
+                if(response.status===200){
+                    setProperties(response.data);
+                    setRefreshButtonVisible(true);
+                    
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching data: ", error);
+                setError(error);
+            })
+            .finally(()=>{
+                console.log('finally');
+            })
+        }else{
+            console.log("No job_id - spierdalaj");
+        }
+      };
+
     console.log('ScrapeResponse '+properties.length+" job_ids "+props.job_ids);
     useEffect(() => {
         console.log('ScrapeResponse useEffect '+properties.length+" job_ids "+props.job_ids.join(','));
         setError(false);
         const intervalId = setInterval(() => {
-        if(props.job_ids && refreshing){
+        if(props.job_ids){
             axiosInstance.get("scrape/"+props.job_ids.join(','))
             .then((response) => {
                 console.log("ScrapeResponse response: ", response);
                 if(response.status===200){
                     setProperties(response.data);
                     clearInterval(intervalId);
+                    setRefreshButtonVisible(true);
                     
                 }else if(response.status === 202){
                     console.log('response.status 202');
@@ -125,14 +149,21 @@ function ScrapeResponse(props){
             })
             .finally(()=>{
                 console.log('finally');
-                setRefreshing(false); 
             })
         }else{
             console.log("No job_id - spierdalaj");
         }
         },2000);
         return () => clearInterval(intervalId);
-    }, [props.job_ids, refreshing]);
+    }, [props.job_ids]);
+
+    // useEffect(() => {
+    //     if (refreshButtonVisible) {
+    //         setRefreshButtonVisible(true);
+    //     } else {
+    //         setRefreshButtonVisible(false);
+    //     }
+    // }, [properties]);
 
     if(error !== false) {
         return <Typography>Error fetching data: {error.message},  {error.status_code}</Typography>
@@ -147,7 +178,16 @@ function ScrapeResponse(props){
         return <Typography>No results, expand your search criteria</Typography>
     }
     else if(properties) {
-       return <PropertiesTable properties={properties}/>
+       return (
+        <React.Fragment>
+            <PropertiesTable properties={properties}/>
+            {refreshButtonVisible && (
+            <Button variant="contained" onClick={handleRefresh}>
+                Refresh
+            </Button>
+            )}
+        </React.Fragment>
+        )
     }
 
 }
