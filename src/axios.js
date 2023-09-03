@@ -52,13 +52,11 @@ axiosInstance.interceptors.response.use((response) => {
                 // strona rejestracji i logowania niewymaga wysyłania nagłąwka z Authentication więc z tych stron tutaj nietrafię
                 // jeśli ich niedostarczyłem to znaczy że ich niema więc muszę się zalogować
                 history.push("/signin");
-                return Promise.reject(error);
             } else if (error.response.config.url === "accounts/token/signin/refresh/") {
                 console.log("refresh token is not valid or expired - you must log in");
                 localStorage.clear();
                 // window.location.href="/signin";
                 history.push("/signin");
-                return Promise.reject(error);
                 // return Promise.resolve();
             } else if (error.response.data.detail === "Given token not valid for any token type") {
                 console.log("access token propably expired");
@@ -84,21 +82,23 @@ axiosInstance.interceptors.response.use((response) => {
                 }
             }else if (error.response.data.detail === "No active account found with the given credentials"){
                 console.log("podano złe dane logowania");
-                return Promise.reject(error);
+            }else if (error.response.data.code === "user_not_found") {
+                console.log("User not found - wylogowywanie i przekierowanie na stronę logowania");
+                localStorage.clear();
+                history.push("/signin");
             }
             // window.location.href="/signin";
             // navigate('/signin');
         } else if (error.response.status === null) {
             console.log("AxiosInterceptor propably CORS error " + error);
-            return Promise.reject(error);
         } else {
             console.log("AxiosInterceptor error " + error);
-            return Promise.reject(error);
         }
     } else {
         console.log("AxiosInterceptor error no error.response");
-        return Promise.reject(error);
+        
     }
+    return Promise.reject(error);
 });
 // }
 
