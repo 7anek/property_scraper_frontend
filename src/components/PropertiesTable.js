@@ -1,6 +1,8 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
+import { useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 const columns = [
   {
@@ -78,10 +80,26 @@ const columns = [
 
 export default function PropertiesTable({properties}) {
   const getRowId = (row) => row.id;
+  const theme = useTheme();
+  const isMobileScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTabletScreen = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+  const isDesktopScreen = useMediaQuery(theme.breakpoints.up('md'));
+
+  // const isMobileScreen = useMediaQuery('(max-width: 600px)');
+  let tableWidth = 'calc(100% - 48px)'; // Domyślna szerokość dla desktopu
+
+  if (isMobileScreen) {
+    tableWidth = 'calc(100vw - 48px)'; // Szerokość dla smartfona
+  } else if (isTabletScreen) {
+    tableWidth = 'calc(100vw - 48px - 240px)'; //minus paddingi i menu boczne
+  }
+  // const tableWidth = isMobileScreen
+  //   ? 'calc(100vw - 48px)'
+  //   : `calc(100% - 48px)`; // 48px to suma marginesów na bokach
   return (
     // <Box sx={{ height: '100vh', width: '100%' }}>
     //- top menu i marginesy
-    <Box sx={{ height: (window.innerHeight-64-24-24)+"px", width: '100%' }}>
+    <Box sx={{ height: (window.innerHeight-64-24-24)+"px", width: tableWidth, maxWidth: '100%' }}>
       <DataGrid
         rows={properties}
         columns={columns}

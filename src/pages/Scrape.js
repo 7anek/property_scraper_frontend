@@ -174,8 +174,17 @@ function ScrapeResponse(props){
             <Loading />
             <GallserySkeleton />
         </React.Fragment>);
-    }else if(properties === []){
-        return <Typography>No results, expand your search criteria</Typography>
+    }else if(properties.length === 0){
+        return (
+            <React.Fragment>
+        <Typography>No results, expand your search criteria</Typography>
+        {refreshButtonVisible && (
+            <Button sx={{my:2}}variant="contained" onClick={handleRefresh}>
+                Refresh
+            </Button>
+            )}
+        </React.Fragment>
+        )
     }
     else if(properties) {
        return (
